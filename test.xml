@@ -1,4 +1,5 @@
-<ns0:Envelope xmlns:ns0="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://www.plexus-online.com/DataSource"><ns0:Body>
+<ns0:Envelope xmlns:ns0="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://www.plexus-online.com/DataSource">
+<ns0:Body>
 <ns1:ExecuteDataSource>
 <ns1:ExecuteDataSourceRequest>
 <ns1:DataSourceKey>2272</ns1:DataSourceKey>
@@ -8,11 +9,45 @@
 <ns1:Name>Workcenter_Key</ns1:Name>
 <ns1:Required>true</ns1:Required>
 <ns1:Output>true</ns1:Output>
-<ns1:DefaultValue>None</ns1:DefaultValue>
-<ns1:Message>None</ns1:Message>
 </ns1:InputParameter>
 </ns1:InputParameters>
 </ns1:ExecuteDataSourceRequest>
 </ns1:ExecuteDataSource>
-</ns0:Body><
-/ns0:Envelope>
+</ns0:Body>
+</ns0:Envelope>
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dat="http://www.plexus-online.com/DataSource">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <dat:ExecuteDataSource>
+         <ExecuteDataSourceRequest xmlns="http://www.plexus-online.com/DataSource">
+            <DataSourceKey>2272</DataSourceKey>
+            <InputParameters>
+               <InputParameter>
+                   <Value>61324</Value>
+                   <Name>Workcenter_Key</Name>
+                  <Required>false</Required>
+                  <Output>false</Output>
+               </InputParameter>
+            </InputParameters>
+         </ExecuteDataSourceRequest>
+      </dat:ExecuteDataSource>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+<?xml version="1.0" encoding="utf-8"?>
+<ns0:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:ns1="http://www.plexus-online.com/DataSource">
+<ns0:Body>
+<ns1:ExecuteDataSource>
+<ns1:ExecuteDataSourceRequest xmlns="http://www.plexus-online.com/DataSource">
+<ns1:DataSourceKey>2272</ns1:DataSourceKey>
+<ns1:InputParameters>
+<ns1:InputParameter>
+<ns1:Value>61324</ns1:Value>
+<ns1:Name>Workcenter_Key</ns1:Name>
+</ns1:InputParameter>
+</ns1:InputParameters>
+</ns1:ExecuteDataSourceRequest>
+</ns1:ExecuteDataSource>
+</ns0:Body>
+</ns0:Envelope>
