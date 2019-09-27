@@ -6,26 +6,30 @@ from zeep import Client,Settings
 from requests import Session
 from requests.auth import HTTPBasicAuth
 from zeep.transports import Transport
-from zeep.plugins import HistoryPlugin
-from lxml import etree
-from zeep import Plugin
+# from zeep.plugins import HistoryPlugin
+# from lxml import etree
+import xml.etree.ElementTree as ET
+from zeep.wsdl.utils import etree_to_string
 
-class MyLoggingPlugin(Plugin):
+# from zeep import Plugin
+from zeep.exceptions import Fault, TransportError, XMLSyntaxError
 
-    def ingress(self, envelope, http_headers, operation):
-        print(etree.tostring(envelope, pretty_print=True))
-        return envelope, http_headers
-
-    def egress(self, envelope, http_headers, operation, binding_options):
-        print(etree.tostring(envelope, pretty_print=True))
-        return envelope, http_headers
+# class MyLoggingPlugin(Plugin):
+# 
+#     def ingress(self, envelope, http_headers, operation):
+#         print(etree.tostring(envelope, pretty_print=True))
+#         return envelope, http_headers
+# 
+#     def egress(self, envelope, http_headers, operation, binding_options):
+#         print(etree.tostring(envelope, pretty_print=True))
+#         return envelope, http_headers
     
 #python -m zeep "https://api.plexonline.com/DataSource/Service.asmx?WSDL"
 wsdl = "https://api.plexonline.com/DataSource/Service.asmx?WSDL"
 session = Session()
 session.auth = HTTPBasicAuth('BuscheAvillaKorsws@plex.com', '5b11b45-f59f-')
 settings = Settings(strict=False, raw_response=True)
-history = HistoryPlugin()
+# history = HistoryPlugin()
 # client = Client(
 #     'http://examples.python-zeep.org/basic.wsdl',
 #     plugins=[history])
@@ -35,8 +39,12 @@ history = HistoryPlugin()
 # print(history.last_received)
 
 #An additional argument 'transport' is passed with the authentication details
-client = Client(wsdl, plugins=[MyLoggingPlugin],transport=Transport(session=session),settings=settings)
+# client = Client(wsdl, plugins=[MyLoggingPlugin],transport=Transport(session=session),settings=settings)
+client = Client(wsdl, transport=Transport(session=session),settings=settings)
 
+# try:
+
+    
 request_data1 = {
 'ExecuteDataSourceRequest':{
                 'DataSourceKey':"2272",
@@ -50,10 +58,10 @@ request_data1 = {
 request_data2 = {
         'ExecuteDataSourceRequest':{
             'InputParameters':{
-                'InputParameter':{
+                'InputParameter':[{
                     'Name':'@PLC_Name',
                     'Value':'CNC103'
-                }
+                }]
             },
             'DataSourceKey':'7868'
             
@@ -71,9 +79,40 @@ request_data3 = {
             
         }
 }
+request_data4 = {
+    'InputParameters':{
+        'InputParameter':{
+            'Name':'@PLC_Name',
+            'Value':'CNC103'
+        }
+    },
+    'DataSourceKey':'7868'
+}
+test2 = {
+    'DataSourceKey':"2272",
+    'InputParameters': [{
+        'InputParameter': {
+            'Name':'Workcenter_Key',
+            'Value':'61324',
+            'Required':'None',
+            'Output':'None',
+            'DefaultValue':'None',
+            'Message':'None'
+        }
+    }]
+}
 
-client.service.ExecuteDataSource(**request_data2)
-print(history.last_sent)
+
+# node=client.create_message(client.service, 'ExecuteDataSource',**request_data2)
+node=client.create_message(client.service, 'ExecuteDataSource',ExecuteDataSourceRequest=test2)
+tree = ET.ElementTree(node)
+# etree_to_string(tree).de.decode()
+tree.write('test.xml')
+#     client.service.ExecuteDataSource(**request_data2)
+# except Fault as error:
+#     print(ET.tostring(error.detail))
+
+
 # print(history.last_received)
 
 request_data = {
@@ -132,9 +171,9 @@ request_data = {
 #              }   
 #         }
 #     })
-response = client.service.ExecuteDataSource(**request_data)
-dsn=response['DataSourceName']
-print(dsn)
+#response = client.service.ExecuteDataSource(**request_data)
+# dsn=response['DataSourceName']
+# print(dsn)
 
 
 #Here 'request_data' is the request parameter dictionary.
